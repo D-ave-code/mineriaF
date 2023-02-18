@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+
+  </head>
+
+  <body>
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <a type="button" href="formulario.html" class="btn btn-info">
+            <i class="bi bi-arrow-return-left"></i>
+          </a>
+          <div class="collapse navbar-collapse" id="navbarNavDropdown">
+           
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Pacientes</a>
+              </li>
+              
+              
+          
+            </ul>
+          </div>
+          <div class="d-flex">
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="#">Bienvenido $DOCTOR</a>
+                </li>              
+            
+              </ul>
+            </div>
+            <button type="button" class="btn btn-success">
+              <i class="bi bi-box-arrow-in-left"></i>
+            </button>
+          </div>
+        </div>
+      </nav>
+    </header>
+    
+    <main>
+      <br /><br /><br />
+      <div class="container">
+        <div class="row">
+          <div class="col border-end border-bottom">
+            <h2>Historia paciente</h2>
+          </div>
+          <div class="col border-end-0  border-bottom">
+            <h2>Signos paciente</h2>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col  border-end">
+              <div class="container  ">
+                <div class="row ">
+                  <div class="row">
+                    <div class="col"><p></p></div>
+                  </div>
+                  <div class="row text-center">
+                    <div class="col ">
+                      <img
+                        src="https://i.pinimg.com/originals/af/09/3e/af093e299ac9fcf6300b59bb62024dce.png"
+                        style="height: 124px"
+                        alt=""
+                      />
+                    </div>
+                    <div class="col ">
+                      <img
+                        src="https://www.farma13.com/modules/ph_simpleblog/featured/967.png"
+                        style="height: 124px"
+                        alt=""
+                      />
+                    </div>
+                    
+                  </div>
+                  <div class="row">
+                    <div class="col "><p></p></div>
+                  </div>
+                  <hr>
+                  <div class="col border-end">
+                    <div class="col text-center">cedula</div>
+                    <div class="col text-center">Nombre</div>
+                    <div class="col text-center">apellido</div>
+                    <div class="col text-center">edad</div>
+                    <div class="col text-center">enfermedad</div>
+                    <div class="col text-center">tipo lesion</div>
+                  </div>
+                  <div class="col">
+                    
+                    <div class="col text-center">{{ pacientes.cedula }}</div>
+                    <div class="col text-center">{{ pacientes.nombre }}</div>
+                    <div class="col text-center">{{ pacientes.apellidos }}</div>
+                    <div class="col text-center">$VALOR</div>
+                    <div class="col text-center">{{ pacientes.enfermedad }}</div>
+                    <div class="col text-center">{{ pacientes.tipo_lesion }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col border-end-0">
+              <div class="container">
+                <div class="row">
+                  <div class="col"><p></p></div>
+                </div>
+                <div class="row ">
+                  <div class="row text-center">
+                    <div class="col">
+                      <h5>sintomas de:x</h5>
+                    </div>
+                    <div class="col">
+                      <h5>sintomas de:y</h5>
+                    </div>
+                    <div class="col">
+                      <h5>sintomas de:z</h5>
+                    </div>
+                  </div>
+                  <div class="col border-end">
+                    <div class="row">
+                      <div class="col">
+                        <div class="col">sintoma 1</div>
+                        <div class="col">sintoma 2</div>
+                        <div class="col">sintoma 3</div>
+                      </div>
+                      <div class="col">
+                        <div class="col">$VALOR1</div>
+                        <div class="col">$VALOR2</div>
+                        <div class="col">$VALOR3</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col border-end">
+                    <div class="row">
+                      <div class="col">
+                        <div class="col">sintoma 1</div>
+                        <div class="col">sintoma 2</div>
+                        <div class="col">sintoma 3</div>
+                      </div>
+                      <div class="col">
+                        <div class="col">$VALOR1</div>
+                        <div class="col">$VALOR2</div>
+                        <div class="col">$VALOR3</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col ">
+                    <div class="row">
+                      <div class="col">
+                        <div class="col">sintoma 1</div>
+                        <div class="col">sintoma 2</div>
+                        <div class="col">sintoma 3</div>
+                        <div class="col">sintoma 3</div>
+                      </div>
+                      <div class="col">
+                        <div class="col">$VALOR1</div>
+                        <div class="col">$VALOR2</div>
+                        <div class="col">$VALOR3</div>
+                        <div class="col">$VALOR3</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr>
+                <!-- SEGUNDA PARTE SINTOMAS VAN O NO... -->
+                <div class="row">
+                  <div class="row text-center">
+                    <div class="col">
+                      <h5>sintomas de:a</h5>
+                    </div>
+                    <div class="col">
+                      <h5>sintomas de:b</h5>
+                    </div>
+                    <div class="col">
+                      <h5>sintomas de:c</h5>
+                    </div>
+                  </div>
+                  <div class="col border-end">
+                    <div class="row">
+                      <div class="col">
+                        <div class="col">sintoma 1</div>
+                        <div class="col">sintoma 2</div>
+                        <div class="col">sintoma 3</div>
+                      </div>
+                      <div class="col">
+                        <div class="col">$VALOR1</div>
+                        <div class="col">$VALOR2</div>
+                        <div class="col">$VALOR3</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col border-end">
+                    <div class="row">
+                      <div class="col">
+                        <div class="col">sintoma 1</div>
+                        <div class="col">sintoma 2</div>
+                        <div class="col">sintoma 3</div>
+                      </div>
+                      <div class="col">
+                        <div class="col">$VALOR1</div>
+                        <div class="col">$VALOR2</div>
+                        <div class="col">$VALOR3</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col ">
+                    <div class="row">
+                      <div class="col">
+                        <div class="col">sintoma 1</div>
+                        <div class="col">sintoma 2</div>
+                        <div class="col">sintoma 3</div>
+                        <div class="col">sintoma 3</div>
+                        
+                      </div>
+                      <div class="col">
+                        <div class="col">$VALOR1</div>
+                        <div class="col">$VALOR2</div>
+                        <div class="col">$VALOR3</div>
+                        <div class="col">$VALOR3</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- FIN SEGUNDA PARTE SINTOMAS  -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <table hidden class="table">
+          <thead>
+            <th>Nombre</th>
+            <th>apellidos</th>
+            <th>cedula</th>
+            <th>enfermedad</th>
+            <th>tipo_lesion</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ pacientes.nombre }}</td>
+              <td>{{ pacientes.apellidos }}</td>
+              <td>{{ pacientes.cedula }}</td>
+              <td>{{ pacientes.enfermedad }}</td>
+              <td>{{ pacientes.tipo_lesion }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <br />
+
+        <input
+          hidden
+          type="text"
+          id="prompt"
+          value="Dame informacion sobre {{pacientes.enfermedad}}"
+        />
+        <!-- <button class="btn btn-primary" id="generate-answer-button">Dame info sobre la enfermedad</button> -->
+        <hr />
+        <!-- <h2>informacion sobre la enfermedad: {{pacientes.enfermedad}}</h2>
+    <div id="answer">{{res.text}}</div> -->
+        <h1>OpenAI Example</h1>
+        <label for="prompt">Prompt:</label>
+        <input
+          hidden
+          type="text"
+          id="prompt"
+          value="dame info sobre la enfermedad {{pacientes.enfermedad}}"
+        />
+        <button id="generate-answer-button">Mas info</button>
+        <hr />
+        <h2>Answer:</h2>
+        <div id="answer"></div>
+      </div>
+    </main>
+    <footer>
+      <!-- place footer here -->
+    </footer>
+    <!-- Bootstrap JavaScript Libraries -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+      integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+      integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      async function generateAnswer() {
+        const prompt = document.getElementById("prompt").value;
+        const apiKey = "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";
+        const modelEngine = "text-davinci-003";
+
+        const response = await fetch("https://api.openai.com/v1/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization:
+              "Bearer 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",
+          },
+          body: JSON.stringify({
+            prompt,
+            max_tokens: 1024,
+            temperature: 0.5,
+            model: modelEngine,
+          }),
+        });
+
+        if (!response.ok) {
+          console.error(
+            `Failed to generate answer: ${response.status} ${response.statusText}`
+          );
+          return;
+        }
+
+        const responseJson = await response.json();
+        const answer = responseJson.choices[0].text;
+
+        document.getElementById("answer").innerHTML = answer;
+      }
+
+      document
+        .getElementById("generate-answer-button")
+        .addEventListener("click", generateAnswer);
+    </script>
+  </body>
+</html>

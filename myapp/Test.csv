@@ -1,0 +1,3 @@
+lesion_id;temperatura;edad;dolor_cabeza;conjuntivitis;malestar_general;ganglios_hinchados;tos;moqueo;dolor_garganta;diarrea;vomito;nauseas;infec_oid;convulsion;comezon;perdida_apetito;dolor_tragar;hinchazon;hinchazon_boca;dolor_abdominal;escalofrio;perdida_gusto;dolor_dentadura;cara;torso;cabeza;extremidades_superiores;extremidades_inferiores;genitales;manos;boca;pies
+1;37.3;4;0;0;0;0;0;0;0;0;0;0;0;0;1;0;0;0;0;0;0;0;0;1;1;0;1;0;0;0;0;0
+4;38.1;6;0;0;0;0;0;0;0;0;0;0;0;0;1;0;0;0;0;0;0;0;0;1;0;1;0;0;0;0;0;0
