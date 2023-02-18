@@ -16,38 +16,47 @@
       integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"
+    />
   </head>
 
   <body>
     <header>
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <nav class=" fixed-top navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
             <span class="navbar-toggler-icon"></span>
           </button>
-          <a type="button" href="formulario.html" class="btn btn-info">
+          <a type="button" href="/" class="btn btn-info">
             <i class="bi bi-arrow-return-left"></i>
           </a>
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
-           
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Pacientes</a>
+                <a class="nav-link active" aria-current="page" href="#"
+                  >Pacientes</a
+                >
               </li>
-              
-              
-          
             </ul>
           </div>
           <div class="d-flex">
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
               <ul class="navbar-nav">
                 <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="#">Bienvenido $DOCTOR</a>
-                </li>              
-            
+                  <a class="nav-link active" aria-current="page" href="#"
+                    >Bienvenido $DOCTOR</a
+                  >
+                </li>
               </ul>
             </div>
             <button type="button" class="btn btn-success">
@@ -57,7 +66,7 @@
         </div>
       </nav>
     </header>
-    
+
     <main>
       <br /><br /><br />
       <div class="container">
@@ -65,184 +74,288 @@
           <div class="col border-end border-bottom">
             <h2>Historia paciente</h2>
           </div>
-          <div class="col border-end-0  border-bottom">
+          <div class="col border-end-0 border-bottom">
             <h2>Signos paciente</h2>
           </div>
         </div>
-        <div class="container">
-          <div class="row">
-            <div class="col  border-end">
-              <div class="container  ">
-                <div class="row ">
-                  <div class="row">
-                    <div class="col"><p></p></div>
-                  </div>
-                  <div class="row text-center">
-                    <div class="col ">
-                      <img
-                        src="https://i.pinimg.com/originals/af/09/3e/af093e299ac9fcf6300b59bb62024dce.png"
-                        style="height: 124px"
-                        alt=""
-                      />
-                    </div>
-                    <div class="col ">
-                      <img
-                        src="https://www.farma13.com/modules/ph_simpleblog/featured/967.png"
-                        style="height: 124px"
-                        alt=""
-                      />
-                    </div>
-                    
-                  </div>
-                  <div class="row">
-                    <div class="col "><p></p></div>
-                  </div>
-                  <hr>
-                  <div class="col border-end">
-                    <div class="col text-center">cedula</div>
-                    <div class="col text-center">Nombre</div>
-                    <div class="col text-center">apellido</div>
-                    <div class="col text-center">edad</div>
-                    <div class="col text-center">enfermedad</div>
-                    <div class="col text-center">tipo lesion</div>
+
+        <div class="row">
+          <div class="col border-end">
+            <div class="container">
+              <div class="row">
+                <div class="row">
+                  <div class="col"><p></p></div>
+                </div>
+                <div class="row text-center">
+                  <div class="col">
+                    <img
+                      src="https://i.pinimg.com/originals/af/09/3e/af093e299ac9fcf6300b59bb62024dce.png"
+                      style="height: 124px"
+                      alt=""
+                    />
                   </div>
                   <div class="col">
-                    
+                    <img
+                      src="https://www.farma13.com/modules/ph_simpleblog/featured/967.png"
+                      style="height: 124px"
+                      alt=""
+                    />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col"><p></p></div>
+                </div>
+                <hr />
+                <div class="col">
+                  <div class="row">
+                    <div class="col border-end text-center">cedula</div>
                     <div class="col text-center">{{ pacientes.cedula }}</div>
+                  </div>
+                  <div class="row">
+                    <div class="col border-end text-center">Nombre</div>
                     <div class="col text-center">{{ pacientes.nombre }}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col border-end text-center">apellido</div>
                     <div class="col text-center">{{ pacientes.apellidos }}</div>
-                    <div class="col text-center">$VALOR</div>
-                    <div class="col text-center">{{ pacientes.enfermedad }}</div>
-                    <div class="col text-center">{{ pacientes.tipo_lesion }}</div>
+                  </div>
+                  <div class="row">
+                    <div class="col border-end text-center">edad</div>
+                    <div class="col text-center">{{ pacientes.edad }}</div>
+                  </div>
+                  <div class="row">
+                    <div class="col border-end text-center">enfermedad</div>
+                    <div class="col text-center">
+                      {{ pacientes.enfermedad }}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col border-end text-center">tipo lesion</div>
+                    <div class="col text-center">
+                      {{ pacientes.tipo_lesion }}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
 
-            <div class="col border-end-0">
-              <div class="container">
-                <div class="row">
-                  <div class="col"><p></p></div>
+          <div class="col border-end-0">
+            <div class="container">
+              <div class="row">
+                <div class="col"><p></p></div>
+              </div>
+              <div class="row text-center">
+                <div class="col">
+                  <h5>sintomas Generales</h5>
                 </div>
-                <div class="row ">
-                  <div class="row text-center">
-                    <div class="col">
-                      <h5>sintomas de:x</h5>
-                    </div>
-                    <div class="col">
-                      <h5>sintomas de:y</h5>
-                    </div>
-                    <div class="col">
-                      <h5>sintomas de:z</h5>
-                    </div>
-                  </div>
-                  <div class="col border-end">
-                    <div class="row">
-                      <div class="col">
-                        <div class="col">sintoma 1</div>
-                        <div class="col">sintoma 2</div>
-                        <div class="col">sintoma 3</div>
-                      </div>
-                      <div class="col">
-                        <div class="col">$VALOR1</div>
-                        <div class="col">$VALOR2</div>
-                        <div class="col">$VALOR3</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col border-end">
-                    <div class="row">
-                      <div class="col">
-                        <div class="col">sintoma 1</div>
-                        <div class="col">sintoma 2</div>
-                        <div class="col">sintoma 3</div>
-                      </div>
-                      <div class="col">
-                        <div class="col">$VALOR1</div>
-                        <div class="col">$VALOR2</div>
-                        <div class="col">$VALOR3</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col ">
-                    <div class="row">
-                      <div class="col">
-                        <div class="col">sintoma 1</div>
-                        <div class="col">sintoma 2</div>
-                        <div class="col">sintoma 3</div>
-                        <div class="col">sintoma 3</div>
-                      </div>
-                      <div class="col">
-                        <div class="col">$VALOR1</div>
-                        <div class="col">$VALOR2</div>
-                        <div class="col">$VALOR3</div>
-                        <div class="col">$VALOR3</div>
-                      </div>
-                    </div>
-                  </div>
+                <div class="col">
+                  <h5>sintomas Respiratorios</h5>
                 </div>
-                <hr>
-                <!-- SEGUNDA PARTE SINTOMAS VAN O NO... -->
-                <div class="row">
-                  <div class="row text-center">
-                    <div class="col">
-                      <h5>sintomas de:a</h5>
-                    </div>
-                    <div class="col">
-                      <h5>sintomas de:b</h5>
-                    </div>
-                    <div class="col">
-                      <h5>sintomas de:c</h5>
+                <div class="col">
+                  <h5>sintomas Gastrointestinales</h5>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col border-end">
+                  <div class="row">
+                    <div class="col-6">Temperatura</div>
+                    <div class="col text-center">{{sintomas.temperatura}}</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-6">Malestar general</div>
+                    <div class="col-6 text-center">
+                      <div class="l" style="margin-top: 15%">
+                        {{sintomas.malestar_general}}
+                      </div>
                     </div>
                   </div>
-                  <div class="col border-end">
-                    <div class="row">
-                      <div class="col">
-                        <div class="col">sintoma 1</div>
-                        <div class="col">sintoma 2</div>
-                        <div class="col">sintoma 3</div>
+                  <div class="row">
+                    <div class="col-6">Escalofrio</div>
+                    <div class="col text-center">{{sintomas.escalofrio}}</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-6">Perdida apetito</div>
+                    <div class="col text-center">
+                      <div class="l" style="margin-top: 15%">
+                        {{sintomas.perdida_apetito}}
                       </div>
-                      <div class="col">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-6">Dolor de cabeza</div>
+                    <div class="col text-center">
+                      <div class="l" style="margin-top: 15%">{{sintomas.dolor_cabeza}}</div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-6">Ganglios inchados</div>
+                    <div class="col text-center">
+                      <div class="l" style="margin-top: 15%">{{sintomas.ganglios_hinchados}}</div>
+                    </div>
+                  </div>
+
+                  <!--  <div class="col">
                         <div class="col">$VALOR1</div>
                         <div class="col">$VALOR2</div>
                         <div class="col">$VALOR3</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col border-end">
-                    <div class="row">
-                      <div class="col">
-                        <div class="col">sintoma 1</div>
-                        <div class="col">sintoma 2</div>
-                        <div class="col">sintoma 3</div>
-                      </div>
-                      <div class="col">
-                        <div class="col">$VALOR1</div>
-                        <div class="col">$VALOR2</div>
                         <div class="col">$VALOR3</div>
+                        <div class="col">$VALsOR3</div>
+                        <div class="col">$VALOR3</div>
+                      </div> -->
+                </div>
+                <div class="col border-end">
+                  <div class="row">
+                    <div class="col">
+                      <div class="row">
+                        <div class="col-6">Tos</div>
+                        <div class="col text-center">{{sintomas.tos}}</div>
                       </div>
-                    </div>
-                  </div>
-                  <div class="col ">
-                    <div class="row">
-                      <div class="col">
-                        <div class="col">sintoma 1</div>
-                        <div class="col">sintoma 2</div>
-                        <div class="col">sintoma 3</div>
-                        <div class="col">sintoma 3</div>
+                      <div class="row">
+                        <div class="col-6">Moqueo</div>
+                        <div class="col text-center">{{sintomas.moqueo}}</div>
+                      </div>
+                      <div class="row">
+                        <div class="col-6">Dolor garganta</div>
+                        <div class="col text-center">
+                          <div class="l" style="margin-top: 15%">
+                            {{sintomas.dolor_garganta}}
+                          </div>
+                        </div>
                         
                       </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="row">
+                    <div class="col">
+                      <div class="row">
+                      <div class="col-6">Diarrea</div>
+                      <div class="col text-center">{{sintomas.diarrea}}</div>
+                      </div>
+                      <div class="row">
+                      <div class="col-6">Vomito</div>
+                      <div class="col text-center">{{sintomas.vomito}}</div>
+
+                      </div>
+                      <div class="row">
+                      <div class="col-6">Nauseas</div>
+                      <div class="col  text-center">{{sintomas.nauseas}}</div>
+
+                      </div>
+                      <div class="row">
+                      <div class="col-6">Dolor abdominal</div>
+                      <div class="col  text-center">
+                        <div class="l" style="margin-top: 15%">
+                          {{sintomas.dolor_abdominal}}
+                        </div>
+                      </div>
+                      </div>
+
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+              <hr />
+              <!-- SEGUNDA PARTE SINTOMAS VAN O NO... -->
+              <div class="row">
+                <div class="row text-center">
+                  <div class="col">
+                    <h5>Sintomas locales</h5>
+                  </div>
+                  <!-- <div class="col">
+                      <h5>sintomas de:b</h5>
+                    </div> -->
+                  <div class="col">
+                    <h5>Sintomas adicionales</h5>
+                  </div>
+                </div>
+                <div class="col border-end">
+                  <div class="row">
+                    <div class="col">
+                      <div class="row">
+                        <div class="col">Comezon</div>
+                        <div class="col text-center">{{sintomas.comezon}}</div>
+
+                      </div>
+                      <div class="row">
+                      <div class="col">Hinchazon manos/pies</div>
+                      <div class="col  text-center">
+                        <div class="l" style="margin-top: 15%">
+                          {{sintomas.hinchazon}}
+                        </div>
+                      </div>
+                      </div>
+                      <div class="row">
+                      <div class="col">Hinchazon boca</div>
+                      <div class="col  text-center">
+                        <div class="l" style="margin-top: 15%">
+                          {{sintomas.hinchazon_boca}}
+                        </div>
+                      </div>
+                      </div>
+                      <div class="row">
+                      <div class="col">Enrojecimiento ojo</div>
+                      <div class="col  text-center">
+                        <div class="l" style="margin-top: 15%">
+                         "NO HAY"
+                        </div>
+                      </div>
+                      </div>
+                    </div>
+                   
+                  </div>
+                </div>
+                <!-- <div class="col border-end">
+                    <div class="row">
+                      <div class="col">
+                        <div class="col">sintoma 1</div>
+                        <div class="col">sintoma 2</div>
+                        <div class="col">sintoma 3</div>
+                      </div>
                       <div class="col">
                         <div class="col">$VALOR1</div>
                         <div class="col">$VALOR2</div>
                         <div class="col">$VALOR3</div>
-                        <div class="col">$VALOR3</div>
                       </div>
                     </div>
+                  </div> -->
+                <div class="col">
+                  <div class="row">
+                    <div class="col">
+                      <div class="row">
+                        <div class="col">Dolor al tragar</div>
+                        <div class="col  text-center">
+                          <div class="l" style="margin-top: 15%">
+                            {{sintomas.dolor_tragar}}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                      <div class="col">Dolor dentadura</div>
+                      <div class="col  text-center">
+                        <div class="l" style="margin-top: 15%">
+                          {{sintomas.dolor_dentadura}}
+                        </div>
+                      </div>
+                      </div>
+                      <div class="row">
+                      <div class="col">Perdida del gusto</div>
+                      <div class="col  text-center">
+                        <div class="l" style="margin-top: 15%">
+                          {{sintomas.perdida_gusto}}
+                        </div>
+                      </div>
+                      </div>
+                    </div>
+                    
                   </div>
                 </div>
-                <!-- FIN SEGUNDA PARTE SINTOMAS  -->
               </div>
+              <!-- FIN SEGUNDA PARTE SINTOMAS  -->
             </div>
           </div>
         </div>
