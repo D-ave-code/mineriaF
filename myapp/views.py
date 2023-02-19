@@ -14,6 +14,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from .models import Paciente, Sintomas
 import openai
+import base64
+import io
+from PIL import Image, ImageTk
+from tkinter import Tk, Label
 
 
 def home(request):
@@ -105,19 +109,19 @@ def predict(img):
     lesion = '00'
   elif respuesta == 1:
     print ('vesicula')
-    lesion = '01'
+    lesion = '1'
   elif respuesta == 2:
     print ('papula')
-    lesion = '02'
+    lesion = '2'
   elif respuesta == 3:
     print ('eritema')
-    lesion = '03'
+    lesion = '3'
   elif respuesta == 4:
     print ('maculopapular')
-    lesion = 'maculopapular'
+    lesion = '4'
   elif respuesta == 5:
     print ('ampollas')
-    lesion = '05'
+    lesion = '5'
   return lesion
 
 def convert(text):
@@ -132,21 +136,42 @@ def convert(text):
 def formulario(request):
   if request.method == 'POST':
     if request.content_type == 'application/json':
+        #
+        path_img ='https://www.topdoctors.es/files/Image/large/37f95bdfe47f8b59a88fcf1e09454f07.jpg'
+  
+        req=urllib.request.urlopen(path_img)
+        arr = np.asarray(bytearray(req.read()),dtype=np.uint8)
+        img = cv2.imdecode(arr, -1)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        img = cv2.resize(img, (320,320))
+        img_tensor = np.array([img])
+        d = str(predict(img_tensor))
+
+        #
         msg = ""
         data = json.loads(request.body)
-        #return JsonResponse({'msg': msg , "diagnostico": data})
+        # Decodifica la cadena de base64 a sus bytes originales
+        decoded_bytes = base64.b64decode(data['image'])
+
+        # Crea un objeto BytesIO a partir de los bytes decodificados
+        image_file = io.BytesIO(decoded_bytes)
+
+        # Crea una imagen PIL a partir del objetpytho BytesIO
+        img =Image.open(image_file)
+        
+        img.save("static/"+data['cedula']+".jpg")
+        # Ahora puedes usar la imagen en tu código de Django
+        #return JsonResponse({'msg': "valio" , "diagnostico": data})
         modelo_cargado = load(open('myapp\Modelopiel.sav', 'rb'))
-        unidades_datos = np.array([[data['lesionid'],data['temperatura'],data['edad'],data['dolorcabeza'],data['conjuntivitis']
-        ,data['malestargeneral'],data['ganglioshinchados'],data['tos'],data['moqueo'],data['dolorgarganta'],data['diarrea'],data['vomito'],data['nauseas'],data['infecoid']
-        ,data['convulsion'],data['comezon'],data['perdidaapetito'],data['dolortragar'],data['hinchazon'],data['hinchazonboca'],data['dolorabdominal'],data['escalofrio'],data['perdidagusto']
-        ,data['dolordentadura'],data['cara'],data['torso'],data['cabeza'],data['extremidadessuperiores'],data['extremidadesinferiores'],data['genitales'],data['manos'],data['boca'],data['pies']]])
+        unidades_datos = np.array([[d,data['temperatura'],data['edad'],data['dolorCabeza'],data['conjuntivitis']
+        ,data['malestarGeneral'],data['gangliosHinchados'],data['tos'],data['moqueo'],data['dolorGarganta'],data['diarrea'],data['vomito'],data['nauseas'],data['infecOid']
+        ,0,data['comezon'],data['perdidaApetito'],data['dolorTragar'],data['hinchazon'],data['hinchazonBoca'],data['dolorAbdominal'],data['escalofrio'],data['perdidaGusto']
+        ,data['dolorDentadura'],data['cara'],data['torso'],data['cabeza'],data['extremidadesSuperiores'],data['extremidadesInferiores'],data['genitales'],data['manos'],data['boca'],data['pies']]])
               
         unidades = pd.DataFrame(unidades_datos, columns=["lesion_id","temperatura","edad","dolor_cabeza","conjuntivitis","malestar_general","ganglios_hinchados","tos","moqueo","dolor_garganta","diarrea"
         ,"vomito","nauseas","infec_oid","convulsion","comezon","perdida_apetito","dolor_tragar","hinchazon","hinchazon_boca","dolor_abdominal","escalofrio","perdida_gusto","dolor_dentadura"
         ,"cara","torso","cabeza","extremidades_superiores","extremidades_inferiores","genitales","manos","boca","pies"
         ])
-        
-
         msg = "prediccion correcta"
         prediccion_nuevos = modelo_cargado.predict(unidades)   
         try:
@@ -163,47 +188,47 @@ def formulario(request):
           apellidos="",
           cedula=data['cedula'],
           enfermedad=prediccion_nuevos[0],
-          tipo_lesion=data['lesionid'],#aui toca poner el id que retorna el modelo de imagenes
+          tipo_lesion=d,#aui toca poner el id que retorna el modelo de imagenes
           edad=data['edad']
           )
           pacNew.save()
         else:
           pac.enfermedad=prediccion_nuevos[0]
-          pac.tipo_lesion=data['lesionid']#aui toca poner el id que retorna el modelo de imagenes
+          pac.tipo_lesion=d#aui toca poner el id que retorna el modelo de imagenes
           pac.save()  
         
         if pacSintomas is None:
           pacS = Sintomas(
           cedula = data['cedula'],
-          lesion_id = data['lesionid'],
+          lesion_id = d,
           temperatura = data['temperatura'],
           edad = data['edad'],
-          dolor_cabeza = convert(data['dolorcabeza']),
+          dolor_cabeza = convert(data['dolorCabeza']),
           conjuntivitis = convert(data['conjuntivitis']),
-          malestar_general = convert(data['malestargeneral']),
-          ganglios_hinchados = convert(data['ganglioshinchados']),
+          malestar_general = convert(data['malestarGeneral']),
+          ganglios_hinchados = convert(data['gangliosHinchados']),
           tos = convert(data['tos']),
           moqueo = convert(data['moqueo']),
-          dolor_garganta = convert(data['dolorgarganta']),
+          dolor_garganta = convert(data['dolorGarganta']),
           diarrea = convert(data['diarrea']),
           vomito = convert(data['vomito']),
           nauseas = convert(data['nauseas']),
-          infec_oid = convert(data['infecoid']),
-          convulsion = convert(data['convulsion']),
+          infec_oid = convert(data['infecOid']),
+          convulsion = convert(0),
           comezon = convert(data['comezon']),
-          perdida_apetito = convert(data['perdidaapetito']),
-          dolor_tragar = convert(data['dolortragar']),
+          perdida_apetito = convert(data['perdidaApetito']),
+          dolor_tragar = convert(data['dolorTragar']),
           hinchazon = convert(data['hinchazon']),
-          hinchazon_boca = convert(data['hinchazonboca']),
-          dolor_abdominal = convert(data['dolorabdominal']),
+          hinchazon_boca = convert(data['hinchazonBoca']),
+          dolor_abdominal = convert(data['dolorAbdominal']),
           escalofrio = convert(data['escalofrio']),
-          perdida_gusto = convert(data['perdidagusto']),
-          dolor_dentadura = convert(data['dolordentadura']),
+          perdida_gusto = convert(data['perdidaGusto']),
+          dolor_dentadura = convert(data['dolorDentadura']),
           cara = convert(data['cara']),
           torso = convert(data['torso']),
           cabeza = convert(data['cabeza']),
-          extremidades_superiores = convert(data['extremidadessuperiores']),
-          extremidades_inferiores = convert(data['extremidadesinferiores']),
+          extremidades_superiores = convert(data['extremidadesSuperiores']),
+          extremidades_inferiores = convert(data['extremidadesInferiores']),
           genitales = convert(data['genitales']),
           manos = convert(data['manos']),
           boca = convert(data['boca']),
@@ -212,35 +237,35 @@ def formulario(request):
           pacS.save()
         else:
           pacSintomas.cedula = data['cedula']
-          pacSintomas.lesion_id = data['lesionid']
+          pacSintomas.lesion_id = d
           pacSintomas.temperatura = data['temperatura']
           pacSintomas.edad = data['edad']
-          pacSintomas.dolor_cabeza = convert(data['dolorcabeza'])
+          pacSintomas.dolor_cabeza = convert(data['dolorCabeza'])
           pacSintomas.conjuntivitis = convert(data['conjuntivitis'])
-          pacSintomas.malestar_general = convert(data['malestargeneral'])
-          pacSintomas.ganglios_hinchados = convert(data['ganglioshinchados'])
+          pacSintomas.malestar_general = convert(data['malestarGeneral'])
+          pacSintomas.ganglios_hinchados = convert(data['gangliosHinchados'])
           pacSintomas.tos = convert(data['tos'])
           pacSintomas.moqueo = convert(data['moqueo'])
-          pacSintomas.dolor_garganta = convert(data['dolorgarganta'])
+          pacSintomas.dolor_garganta = convert(data['dolorGarganta'])
           pacSintomas.diarrea = convert(data['diarrea'])
           pacSintomas.vomito = convert(data['vomito'])
           pacSintomas.nauseas = convert(data['nauseas'])
-          pacSintomas.infec_oid = convert(data['infecoid'])
-          pacSintomas.convulsion = convert(data['convulsion'])
+          pacSintomas.infec_oid = convert(data['infecOid'])
+          pacSintomas.convulsion = convert(0)
           pacSintomas.comezon = convert(data['comezon'])
-          pacSintomas.perdida_apetito = convert(data['perdidaapetito'])
-          pacSintomas.dolor_tragar = convert(data['dolortragar'])
+          pacSintomas.perdida_apetito = convert(data['perdidaApetito'])
+          pacSintomas.dolor_tragar = convert(data['dolorTragar'])
           pacSintomas.hinchazon = convert(data['hinchazon'])
-          pacSintomas.hinchazon_boca = convert(data['hinchazonboca'])
-          pacSintomas.dolor_abdominal = convert(data['dolorabdominal'])
+          pacSintomas.hinchazon_boca = convert(data['hinchazonBoca'])
+          pacSintomas.dolor_abdominal = convert(data['dolorAbdominal'])
           pacSintomas.escalofrio = convert(data['escalofrio'])
-          pacSintomas.perdida_gusto = convert(data['perdidagusto'])
-          pacSintomas.dolor_dentadura = convert(data['dolordentadura'])
+          pacSintomas.perdida_gusto = convert(data['perdidaGusto'])
+          pacSintomas.dolor_dentadura = convert(data['dolorDentadura'])
           pacSintomas.cara = convert(data['cara'])
           pacSintomas.torso = convert(data['torso'])
           pacSintomas.cabeza = convert(data['cabeza'])
-          pacSintomas.extremidades_superiores = convert(data['extremidadessuperiores'])
-          pacSintomas.extremidades_inferiores = convert(data['extremidadesinferiores'])
+          pacSintomas.extremidades_superiores = convert(data['extremidadesSuperiores'])
+          pacSintomas.extremidades_inferiores = convert(data['extremidadesInferiores'])
           pacSintomas.genitales = convert(data['genitales'])
           pacSintomas.manos = convert(data['manos'])
           pacSintomas.boca = convert(data['boca'])
@@ -251,5 +276,6 @@ def formulario(request):
         responseData = {
         'diagnostico' : [prediccion_nuevos[0]]
         } 
-    return JsonResponse({'msg': msg , "diagnostico": responseData, 'cedula': data['cedula']})
+    #return JsonResponse({'msg': msg })
+    return JsonResponse({'msg': "valio" , "diagnostico": data})
   return JsonResponse({'error': 'Bad request'}, status=400)

@@ -1,3 +1,5 @@
+
+{% load static%}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -96,7 +98,7 @@
                   </div>
                   <div class="col">
                     <img
-                      src="https://www.farma13.com/modules/ph_simpleblog/featured/967.png"
+                      src="../../static/{{ pacientes.cedula }}.jpg"
                       style="height: 124px"
                       alt=""
                     />
@@ -414,7 +416,7 @@
     <script>
       async function generateAnswer() {
         const prompt = document.getElementById("prompt").value;
-        const apiKey = "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";
+        const apiKey = "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";
         const modelEngine = "text-davinci-003";
 
         const response = await fetch("https://api.openai.com/v1/completions", {
@@ -422,7 +424,7 @@
           headers: {
             "Content-Type": "application/json",
             Authorization:
-              "Bearer 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",
+              "Bearer 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",
           },
           body: JSON.stringify({
             prompt,
