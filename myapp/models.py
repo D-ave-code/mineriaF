@@ -24,8 +24,6 @@ class Sintomas(models.Model):
     diarrea = models.CharField(max_length=2)
     vomito = models.CharField(max_length=2)
     nauseas = models.CharField(max_length=2)
-    infec_oid = models.CharField(max_length=2)
-    convulsion = models.CharField(max_length=2)
     comezon = models.CharField(max_length=2)
     perdida_apetito = models.CharField(max_length=2)
     dolor_tragar = models.CharField(max_length=2)

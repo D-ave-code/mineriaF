@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from pickle import load
 import json
 import pandas as pd
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
 from django.http import JsonResponse
 from keras.models import load_model
 import numpy as np
@@ -162,14 +162,14 @@ def formulario(request):
         img.save("static/"+data['cedula']+".jpg")
         # Ahora puedes usar la imagen en tu código de Django
         #return JsonResponse({'msg': "valio" , "diagnostico": data})
-        modelo_cargado = load(open('myapp\Modelopiel.sav', 'rb'))
+        modelo_cargado = load(open('myapp\ModeloPielFinalBosques.sav', 'rb'))
         unidades_datos = np.array([[d,data['temperatura'],data['edad'],data['dolorCabeza'],data['conjuntivitis']
-        ,data['malestarGeneral'],data['gangliosHinchados'],data['tos'],data['moqueo'],data['dolorGarganta'],data['diarrea'],data['vomito'],data['nauseas'],data['infecOid']
-        ,0,data['comezon'],data['perdidaApetito'],data['dolorTragar'],data['hinchazon'],data['hinchazonBoca'],data['dolorAbdominal'],data['escalofrio'],data['perdidaGusto']
+        ,data['malestarGeneral'],data['gangliosHinchados'],data['tos'],data['moqueo'],data['dolorGarganta'],data['diarrea'],data['vomito'],data['nauseas']
+        ,data['comezon'],data['perdidaApetito'],data['dolorTragar'],data['hinchazon'],data['hinchazonBoca'],data['dolorAbdominal'],data['escalofrio'],data['perdidaGusto']
         ,data['dolorDentadura'],data['cara'],data['torso'],data['cabeza'],data['extremidadesSuperiores'],data['extremidadesInferiores'],data['genitales'],data['manos'],data['boca'],data['pies']]])
               
         unidades = pd.DataFrame(unidades_datos, columns=["lesion_id","temperatura","edad","dolor_cabeza","conjuntivitis","malestar_general","ganglios_hinchados","tos","moqueo","dolor_garganta","diarrea"
-        ,"vomito","nauseas","infec_oid","convulsion","comezon","perdida_apetito","dolor_tragar","hinchazon","hinchazon_boca","dolor_abdominal","escalofrio","perdida_gusto","dolor_dentadura"
+        ,"vomito","nauseas","comezon","perdida_apetito","dolor_tragar","hinchazon","hinchazon_boca","dolor_abdominal","escalofrio","perdida_gusto","dolor_dentadura"
         ,"cara","torso","cabeza","extremidades_superiores","extremidades_inferiores","genitales","manos","boca","pies"
         ])
         msg = "prediccion correcta"
@@ -213,8 +213,6 @@ def formulario(request):
           diarrea = convert(data['diarrea']),
           vomito = convert(data['vomito']),
           nauseas = convert(data['nauseas']),
-          infec_oid = convert(data['infecOid']),
-          convulsion = convert(0),
           comezon = convert(data['comezon']),
           perdida_apetito = convert(data['perdidaApetito']),
           dolor_tragar = convert(data['dolorTragar']),
@@ -250,8 +248,6 @@ def formulario(request):
           pacSintomas.diarrea = convert(data['diarrea'])
           pacSintomas.vomito = convert(data['vomito'])
           pacSintomas.nauseas = convert(data['nauseas'])
-          pacSintomas.infec_oid = convert(data['infecOid'])
-          pacSintomas.convulsion = convert(0)
           pacSintomas.comezon = convert(data['comezon'])
           pacSintomas.perdida_apetito = convert(data['perdidaApetito'])
           pacSintomas.dolor_tragar = convert(data['dolorTragar'])
