@@ -61,7 +61,7 @@ def pac(request):
 def chao(request):
   path_img ='https://laboratorio.lister.com.mx/wp-content/uploads/2020/05/enfermedad-Kawasaki.jpg'
   
-  req=urllib.request.urlopen(path_img)
+  req = urllib.request.urlopen(path_img)
   arr = np.asarray(bytearray(req.read()),dtype=np.uint8)
   img = cv2.imdecode(arr, -1)
   img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -94,34 +94,48 @@ def chao(request):
 
   return JsonResponse(responseData)
   return HttpResponse(predict(img_tensor))
-
+cnn = load_model('myapp\modelo.h5')
+cnn.load_weights('myapp\pesos.h5')
 def predict(img):
   
-  model = 'myapp\modelo.h5'
-  weights = 'myapp\pesos.h5'
-  cnn = load_model(model)
-  cnn.load_weights(weights)
+  #model = 'myapp\modelo.h5'
+  #weights = 'myapp\pesos.h5'
+  #cnn = load_model(model)
+  #cnn.load_weights(weights)
   arreglo = cnn.predict(img)
   resultado = arreglo [0]
+  print(resultado)
   respuesta = np.argmax(resultado)
+  arr_sorted = np.sort(resultado)[::-1]
+  arregloPrediccion = np.array([0, 0, 0])
+  i=0
+  while i<3:
+    for j in range(0,6):
+      if arr_sorted[i] == resultado[j]:
+        arregloPrediccion[i] = j+1    
+    i += 1
+  
+  print(arr_sorted)
+  print(respuesta)
+  print(arregloPrediccion)
   if respuesta == 0:
-    print ('leucoplasia')
-    lesion = '00'
-  elif respuesta == 1:
-    print ('vesicula')
+    print ('Costras')
     lesion = '1'
-  elif respuesta == 2:
-    print ('papula')
+  elif respuesta == 1:
+    print ('Papula')
     lesion = '2'
-  elif respuesta == 3:
-    print ('eritema')
+  elif respuesta == 2:
+    print ('Vesicula')
     lesion = '3'
-  elif respuesta == 4:
-    print ('maculopapular')
+  elif respuesta == 3:
+    print ('Leucoplacia')
     lesion = '4'
-  elif respuesta == 5:
-    print ('ampollas')
+  elif respuesta == 4:
+    print ('Dermatofitosis')
     lesion = '5'
+  elif respuesta == 5:
+    print ('Maculopapular')
+    lesion = '6'
   return lesion
 
 def convert(text):
@@ -136,18 +150,7 @@ def convert(text):
 def formulario(request):
   if request.method == 'POST':
     if request.content_type == 'application/json':
-        #
-        path_img ='https://www.topdoctors.es/files/Image/large/37f95bdfe47f8b59a88fcf1e09454f07.jpg'
   
-        req=urllib.request.urlopen(path_img)
-        arr = np.asarray(bytearray(req.read()),dtype=np.uint8)
-        img = cv2.imdecode(arr, -1)
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        img = cv2.resize(img, (320,320))
-        img_tensor = np.array([img])
-        d = str(predict(img_tensor))
-
-        #
         msg = ""
         data = json.loads(request.body)
         # Decodifica la cadena de base64 a sus bytes originales
@@ -157,9 +160,15 @@ def formulario(request):
         image_file = io.BytesIO(decoded_bytes)
 
         # Crea una imagen PIL a partir del objetpytho BytesIO
-        img =Image.open(image_file)
-        
-        img.save("static/"+data['cedula']+".jpg")
+        img2 =Image.open(image_file)
+        img1 = img2.rotate(270)
+        img1.save("static/"+data['cedula']+".jpg")
+
+        img = img1.resize((224, 224))
+        img_array = np.array(img) / 255.0
+        img_array = np.expand_dims(img_array, axis=0)
+        d = str(predict(img_array))
+        print(d)
         # Ahora puedes usar la imagen en tu código de Django
         #return JsonResponse({'msg': "valio" , "diagnostico": data})
         modelo_cargado = load(open('myapp\ModeloPielFinalBosques.sav', 'rb'))
@@ -167,25 +176,41 @@ def formulario(request):
         ,data['malestarGeneral'],data['gangliosHinchados'],data['tos'],data['moqueo'],data['dolorGarganta'],data['diarrea'],data['vomito'],data['nauseas']
         ,data['comezon'],data['perdidaApetito'],data['dolorTragar'],data['hinchazon'],data['hinchazonBoca'],data['dolorAbdominal'],data['escalofrio'],data['perdidaGusto']
         ,data['dolorDentadura'],data['cara'],data['torso'],data['cabeza'],data['extremidadesSuperiores'],data['extremidadesInferiores'],data['genitales'],data['manos'],data['boca'],data['pies']]])
-              
+        
+        conserved = unidades_datos[0,:3]
+        mixed = np.random.permutation(unidades_datos[0,3:])
+        mixed1 = np.random.permutation(unidades_datos[0,3:])
+        print(mixed)
+        print(mixed1)
+         
         unidades = pd.DataFrame(unidades_datos, columns=["lesion_id","temperatura","edad","dolor_cabeza","conjuntivitis","malestar_general","ganglios_hinchados","tos","moqueo","dolor_garganta","diarrea"
         ,"vomito","nauseas","comezon","perdida_apetito","dolor_tragar","hinchazon","hinchazon_boca","dolor_abdominal","escalofrio","perdida_gusto","dolor_dentadura"
         ,"cara","torso","cabeza","extremidades_superiores","extremidades_inferiores","genitales","manos","boca","pies"
         ])
+       
         msg = "prediccion correcta"
         prediccion_nuevos = modelo_cargado.predict(unidades)   
+        prediccion_nuevos1 = modelo_cargado.predict(np.array([np.concatenate((conserved, mixed))]))   
+        prediccion_nuevos2 = modelo_cargado.predict(np.array([np.concatenate((conserved, mixed1))]))   
+         
+        print(prediccion_nuevos)
+
+        print(prediccion_nuevos1)
+
+        print(prediccion_nuevos2)
+        
         try:
           pac = Paciente.objects.get(cedula=data['cedula'])
           pacSintomas = Sintomas.objects.get(cedula=data['cedula'])
         except Paciente.DoesNotExist:
-          print("error")
+          print("no existen datos")
           pac = None
           pacSintomas = None
         
         if pac is None:
           pacNew = Paciente(
           nombre = data['nombre'],
-          apellidos="",
+          apellidos=data['apellidos'],
           cedula=data['cedula'],
           enfermedad=prediccion_nuevos[0],
           tipo_lesion=d,#aui toca poner el id que retorna el modelo de imagenes

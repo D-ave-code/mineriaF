@@ -1,0 +1,30 @@
+.img-contenedor svg {
+    -webkit-transition:all .9s ease; /* Safari y Chrome */
+    -moz-transition:all .9s ease; /* Firefox */
+    -o-transition:all .9s ease; /* IE 9 */
+    -ms-transition:all .9s ease; /* Opera */
+    width:100%;
+    }
+    .img-contenedor:hover svg {
+   
+    -webkit-transform:scale(1.23);
+        -moz-transform:scale(1.23);
+        -ms-transform:scale(1.23);
+        -o-transform:scale(1.23);
+        transform:scale(1.23);
+    }
+
+    .img-contenedor img {
+        -webkit-transition:all .4s ease; /* Safari y Chrome */
+        -moz-transition:all .4s ease; /* Firefox */
+        -o-transition:all .4s ease; /* IE 9 */
+        -ms-transition:all .4s ease; /* Opera */
+       
+        }
+        .img-contenedor:hover img {
+            -webkit-transform:scale(1.10);
+            -moz-transform:scale(1.10);
+            -ms-transform:scale(1.10);
+            -o-transform:scale(1.10);
+            transform:scale(1.10);
+        }
