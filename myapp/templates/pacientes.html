@@ -60,12 +60,14 @@
               </li>
             </ul>
           </div>
+          
+          
           <div class="d-flex">
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
               <ul class="navbar-nav">
                 <li class="nav-item">
                   <a class="nav-link active" aria-current="page" href="#"
-                    >Bienvenido $DOCTOR</a
+                    >Dr. Aguirre</a
                   >
                 </li>
               </ul>
@@ -83,7 +85,7 @@
       <div class="container">
         <div class="row">
           <div class="col border-end border-bottom">
-            <h2>Historia paciente</h2>
+            <h2>Datos paciente</h2>
           </div>
          
           <div class="col border-end-0 border-bottom">
@@ -141,24 +143,38 @@
                     <div class="col border-end text-center">edad</div>
                     <div class="col text-center">{{ pacientes.edad }}</div>
                   </div>
-                  <div class="row">
-                    <div class="col border-end text-center">enfermedad</div>
-                    <div class="col text-center">
-                      {{ pacientes.enfermedad }}
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col border-end text-center">tipo lesion</div>
-                    <div class="col text-center">
-                    
-                      costras
-                    </div>
-                  </div>
+                  
+                  
                 </div>
               </div>
             </div>
             <hr>
-           <br><br>
+           
+           <div class="row  ">
+            <div class="col">
+              <h2>Diagnostico previo</h2>
+            </div>
+           </div>
+           <hr>
+           <div class="row">
+            
+              <div class="row">
+                <div class="col border-end text-center">enfermedad</div>
+                <div class="col text-center">
+                  {{ pacientes.enfermedad }}
+                </div>
+              </div>
+            <div class="row">
+              <div class="col border-end text-center">tipo lesion</div>
+              <div class="col text-center">
+              
+                {{ lesiones.tipo1 }}
+                {{ lesiones.tipo2 }}
+                {{ lesiones.tipo3 }}
+              </div>
+            </div>
+           </div>
+           <hr>
             <div class="row">
               <div class="col text-center">
                 <div class="img-contenedor">
@@ -169,6 +185,7 @@
                 
               </div>
             </div>
+
           </div>
 <!-- poner hr -->
           <div class="col border-end-0">
@@ -220,7 +237,7 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-6">Ganglios inchados</div>
+                    <div class="col-6">Ganglios hinchados</div>
                     <div class="col text-center">
                       <div class="l" style="margin-top: 15%">{{sintomas.ganglios_hinchados}}</div>
                     </div>
@@ -316,6 +333,7 @@
                       <div class="col text-center">
                         <div class="l" style="margin-top: 10%">
                           {{sintomas.hinchazon}}
+                          
                         </div>
                       </div>
                       </div>
@@ -328,7 +346,7 @@
                       <div class="row">
                       <div class="col">Enrojecimiento ojo</div>
                       <div class="col  text-center">
-                         "NO HAY"
+                        {{sintomas.conjuntivitis}}
                       </div>
                       </div>
                     </div>
@@ -380,7 +398,6 @@
             </div>
           </div>
         </div>
-
         <table hidden class="table">
           <thead>
             <th>Nombre</th>
@@ -406,7 +423,7 @@
           hidden
           type="text"
           id="prompt"
-          value="Dame informacion sobre {{pacientes.enfermedad}}"
+          value="Dame un tratamiento para la enfermedad {{pacientes.enfermedad}} para niños de {{pacientes.edad}} años de edad"
         />
         <!-- <button class="btn btn-primary" id="generate-answer-button">Dame info sobre la enfermedad</button> -->
         <hr />
@@ -436,7 +453,7 @@
           hidden
           type="text"
           id="prompt"
-          value="dame info sobre la enfermedad {{pacientes.enfermedad}}"
+          value="dame un tratamiento para la enfermedad {{pacientes.enfermedad}} para niños de {{pacientes.edad}} años de edad"
         />
        <!--  <button id="generate-answer-button">Mas info</button> -->
         <hr />
@@ -479,7 +496,7 @@
     <script>
       async function generateAnswer() {
         const prompt = document.getElementById("prompt").value;
-        const apiKey = "sk-tokenapi";
+        const apiKey = "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";
         const modelEngine = "text-davinci-003";
 
         const response = await fetch("https://api.openai.com/v1/completions", {
@@ -487,7 +504,7 @@
           headers: {
             "Content-Type": "application/json",
             Authorization:
-              "Bearer tokenapi",
+              "Bearer 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",
           },
           body: JSON.stringify({
             prompt,

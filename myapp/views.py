@@ -12,12 +12,14 @@ import cv2
 import tensorflow as tf
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from .models import Paciente, Sintomas
+from .models import Paciente, Sintomas, Lesion
 import openai
 import base64
 import io
 from PIL import Image, ImageTk
 from tkinter import Tk, Label
+import str
+
 
 
 def home(request):
@@ -33,6 +35,8 @@ def busquedaPaciente(request):
       try:
         pacientes = Paciente.objects.get(cedula=request.POST.get('cedula'))
         pacientesSintomas = Sintomas.objects.get(cedula=request.POST.get('cedula'))
+        lesiones = Lesion.objects.get(cedula=request.POST.get('cedula'))
+        
       except Paciente.DoesNotExist:
         return JsonResponse({"error": "Paciente not found"}, status=404)
 
@@ -41,7 +45,7 @@ def busquedaPaciente(request):
       #response = openai.Completion.create(model="text-davinci-003", prompt="dame informacion sobre la enfermedad de " +pacientes.enfermedad, temperature=0, max_tokens=250)
       
       
-      return render(request, "pacientes.html", {"pacientes": pacientes,"sintomas":pacientesSintomas})
+      return render(request, "pacientes.html", {"pacientes": pacientes,"sintomas":pacientesSintomas,"lesiones":lesiones})
       return JsonResponse({'msg': "paciente encontradpo" , "data": pajson})
     #return JsonResponse({'msg': "paciente encontradpo" , "data": pajson})        
   return JsonResponse({'error': 'Bad request'}, status=400)
@@ -96,15 +100,10 @@ def chao(request):
   return HttpResponse(predict(img_tensor))
 cnn = load_model('myapp\modelo.h5')
 cnn.load_weights('myapp\pesos.h5')
-def predict(img):
+def predict(img,cedu):
   
-  #model = 'myapp\modelo.h5'
-  #weights = 'myapp\pesos.h5'
-  #cnn = load_model(model)
-  #cnn.load_weights(weights)
   arreglo = cnn.predict(img)
   resultado = arreglo [0]
-  print(resultado)
   respuesta = np.argmax(resultado)
   arr_sorted = np.sort(resultado)[::-1]
   arregloPrediccion = np.array([0, 0, 0])
@@ -114,10 +113,44 @@ def predict(img):
       if arr_sorted[i] == resultado[j]:
         arregloPrediccion[i] = j+1    
     i += 1
-  
-  print(arr_sorted)
-  print(respuesta)
-  print(arregloPrediccion)
+  temp = list()
+  try:
+    les = Lesion.objects.get(cedula= cedu)
+  except: 
+    les = None
+  for i in range(0,3):  
+    
+    if arregloPrediccion[i]==1:
+        temp.append('Costras') 
+    if arregloPrediccion[i]==2:
+         temp.append('Papula')
+
+    if arregloPrediccion[i]==3:
+         temp.append('Vesicula')
+
+    if arregloPrediccion[i]==4:
+         temp.append('Leucoplacia')
+
+    if arregloPrediccion[i]==5:
+         temp.append('Dermatofitosis')
+
+    if arregloPrediccion[i]==6:
+         temp.append('Maculopapular')
+
+  if les is None:
+    lnew = Lesion(
+    cedula = cedu,
+    tipo1= temp[0],
+    tipo2= temp[1],
+    tipo3= temp[2]
+     )
+    lnew.save()
+  else:
+    les.tipo1= temp[0]
+    les.tipo2= temp[1]
+    les.tipo3= temp[2]
+    les.save()
+
   if respuesta == 0:
     print ('Costras')
     lesion = '1'
@@ -136,7 +169,7 @@ def predict(img):
   elif respuesta == 5:
     print ('Maculopapular')
     lesion = '6'
-  return lesion
+  return (arregloPrediccion)
 
 def convert(text):
   t=""
@@ -161,27 +194,25 @@ def formulario(request):
 
         # Crea una imagen PIL a partir del objetpytho BytesIO
         img2 =Image.open(image_file)
-        img1 = img2.rotate(270)
+        #img1 = img2.rotate(270)
+        img1 = img2
         img1.save("static/"+data['cedula']+".jpg")
 
         img = img1.resize((224, 224))
         img_array = np.array(img) / 255.0
         img_array = np.expand_dims(img_array, axis=0)
-        d = str(predict(img_array))
-        print(d)
-        # Ahora puedes usar la imagen en tu código de Django
-        #return JsonResponse({'msg': "valio" , "diagnostico": data})
+        d = (predict(img_array,data['cedula']))
+        #return JsonResponse({'msg': "valio" , "diagnostico": "data"})
         modelo_cargado = load(open('myapp\ModeloPielFinalBosques.sav', 'rb'))
-        unidades_datos = np.array([[d,data['temperatura'],data['edad'],data['dolorCabeza'],data['conjuntivitis']
+        unidades_datos = np.array([[d[0],data['temperatura'],data['edad'],data['dolorCabeza'],data['conjuntivitis']
         ,data['malestarGeneral'],data['gangliosHinchados'],data['tos'],data['moqueo'],data['dolorGarganta'],data['diarrea'],data['vomito'],data['nauseas']
         ,data['comezon'],data['perdidaApetito'],data['dolorTragar'],data['hinchazon'],data['hinchazonBoca'],data['dolorAbdominal'],data['escalofrio'],data['perdidaGusto']
         ,data['dolorDentadura'],data['cara'],data['torso'],data['cabeza'],data['extremidadesSuperiores'],data['extremidadesInferiores'],data['genitales'],data['manos'],data['boca'],data['pies']]])
-        
-        conserved = unidades_datos[0,:3]
-        mixed = np.random.permutation(unidades_datos[0,3:])
-        mixed1 = np.random.permutation(unidades_datos[0,3:])
-        print(mixed)
-        print(mixed1)
+        #conserved = unidades_datos[0,:3]
+        #mixed = np.random.permutation(unidades_datos[0,3:])
+        #mixed1 = np.random.permutation(unidades_datos[0,3:])
+        #print(mixed)
+        #print(mixed1)
          
         unidades = pd.DataFrame(unidades_datos, columns=["lesion_id","temperatura","edad","dolor_cabeza","conjuntivitis","malestar_general","ganglios_hinchados","tos","moqueo","dolor_garganta","diarrea"
         ,"vomito","nauseas","comezon","perdida_apetito","dolor_tragar","hinchazon","hinchazon_boca","dolor_abdominal","escalofrio","perdida_gusto","dolor_dentadura"
@@ -190,27 +221,25 @@ def formulario(request):
        
         msg = "prediccion correcta"
         prediccion_nuevos = modelo_cargado.predict(unidades)   
-        prediccion_nuevos1 = modelo_cargado.predict(np.array([np.concatenate((conserved, mixed))]))   
-        prediccion_nuevos2 = modelo_cargado.predict(np.array([np.concatenate((conserved, mixed1))]))   
+        #prediccion_nuevos1 = modelo_cargado.predict(np.array([np.concatenate((conserved, mixed))]))   
+        #prediccion_nuevos2 = modelo_cargado.predict(np.array([np.concatenate((conserved, mixed1))]))   
          
-        print(prediccion_nuevos)
-
-        print(prediccion_nuevos1)
-
-        print(prediccion_nuevos2)
+        #print(prediccion_nuevos)
+        #print(prediccion_nuevos1)
+        #print(prediccion_nuevos2)
         
         try:
           pac = Paciente.objects.get(cedula=data['cedula'])
           pacSintomas = Sintomas.objects.get(cedula=data['cedula'])
         except Paciente.DoesNotExist:
-          print("no existen datos")
+          print("creando datos")
           pac = None
           pacSintomas = None
         
         if pac is None:
           pacNew = Paciente(
           nombre = data['nombre'],
-          apellidos=data['apellidos'],
+          apellidos=data['apeelido'],
           cedula=data['cedula'],
           enfermedad=prediccion_nuevos[0],
           tipo_lesion=d,#aui toca poner el id que retorna el modelo de imagenes
@@ -218,8 +247,11 @@ def formulario(request):
           )
           pacNew.save()
         else:
+          pac.nombre = data['nombre']
+          pac.apellidos=data['apeelido']
           pac.enfermedad=prediccion_nuevos[0]
           pac.tipo_lesion=d#aui toca poner el id que retorna el modelo de imagenes
+          pac.edad=data['edad']
           pac.save()  
         
         if pacSintomas is None:
@@ -292,11 +324,6 @@ def formulario(request):
           pacSintomas.boca = convert(data['boca'])
           pacSintomas.pies = convert(data['pies'])
           pacSintomas.save()
-         
-
-        responseData = {
-        'diagnostico' : [prediccion_nuevos[0]]
-        } 
     #return JsonResponse({'msg': msg })
     return JsonResponse({'msg': "valio" , "diagnostico": data})
   return JsonResponse({'error': 'Bad request'}, status=400)

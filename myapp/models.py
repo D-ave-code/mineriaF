@@ -6,8 +6,15 @@ class Paciente(models.Model):
     apellidos = models.CharField(max_length=50)
     cedula = models.CharField(max_length=10)
     enfermedad = models.CharField(max_length=50)
-    tipo_lesion = models.CharField(max_length=10)
+    tipo_lesion = models.CharField(max_length=30)
     edad = models.CharField(max_length=10)
+
+class Lesion(models.Model):
+    cedula = models.CharField(max_length=10)
+    tipo1 = models.CharField(max_length=30)
+    tipo2 = models.CharField(max_length=30)
+    tipo3 = models.CharField(max_length=30)
+
 
 class Sintomas(models.Model):
     cedula = models.CharField(max_length=10)
