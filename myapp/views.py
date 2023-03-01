@@ -239,7 +239,7 @@ def formulario(request):
         if pac is None:
           pacNew = Paciente(
           nombre = data['nombre'],
-          apellidos=data['apeelido'],
+          apellidos=data['apellido'],
           cedula=data['cedula'],
           enfermedad=prediccion_nuevos[0],
           tipo_lesion=d,#aui toca poner el id que retorna el modelo de imagenes
@@ -248,7 +248,7 @@ def formulario(request):
           pacNew.save()
         else:
           pac.nombre = data['nombre']
-          pac.apellidos=data['apeelido']
+          pac.apellidos=data['apellido']
           pac.enfermedad=prediccion_nuevos[0]
           pac.tipo_lesion=d#aui toca poner el id que retorna el modelo de imagenes
           pac.edad=data['edad']
