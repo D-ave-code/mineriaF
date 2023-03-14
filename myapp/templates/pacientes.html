@@ -503,7 +503,7 @@
     <script>
       async function generateAnswer() {
         const prompt = document.getElementById("prompt").value;
-        const apiKey = "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";
+        const apiKey = "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";
         const modelEngine = "text-davinci-003";
 
         const response = await fetch("https://api.openai.com/v1/completions", {
@@ -511,7 +511,7 @@
           headers: {
             "Content-Type": "application/json",
             Authorization:
-              "Bearer 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",
+              "Bearer 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",
           },
           body: JSON.stringify({
             prompt,

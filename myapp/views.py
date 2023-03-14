@@ -19,7 +19,7 @@ import io
 from PIL import Image, ImageTk
 from tkinter import Tk, Label
 import str
-
+import requests
 
 
 def home(request):
@@ -63,27 +63,65 @@ def pac(request):
   return render(request, "pacientes.html", {"pacientes": pacientes})
 
 def chao(request):
-  path_img ='https://laboratorio.lister.com.mx/wp-content/uploads/2020/05/enfermedad-Kawasaki.jpg'
+#  path_img ='https://laboratorio.lister.com.mx/wp-content/uploads/2020/05/enfermedad-Kawasaki.jpg'
+#  
+#  req = urllib.request.urlopen(path_img)
+#  arr = np.asarray(bytearray(req.read()),dtype=np.uint8)
+#  img = cv2.imdecode(arr, -1)
+#  img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+#  img = cv2.resize(img, (320,320))
+#  img_tensor = np.array([img])
+#  d = str(predict(img_tensor,"151515"))
+#  responseData = {
+#        'id': 4,
+#        'name': "cris",
+#        'diagnostico' : d
+#    }
+  urlendPointR = 'http://127.0.0.1:8000/prediccion'
+ 
   
-  req = urllib.request.urlopen(path_img)
-  arr = np.asarray(bytearray(req.read()),dtype=np.uint8)
-  img = cv2.imdecode(arr, -1)
-  img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-  img = cv2.resize(img, (320,320))
-  img_tensor = np.array([img])
-  d = str(predict(img_tensor,"151515"))
-  responseData = {
-        'id': 4,
-        'name': "cris",
-        'diagnostico' : d
-    }
-  return JsonResponse(responseData)
-  # probar
-  unidades_datos = np.array([[4,38.1,6,0,0,0,0,0,0,0
-      ,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0]])
-
-  unidades = pd.DataFrame(unidades_datos, columns=["lesion_id","temperatura","edad","dolor_cabeza","conjuntivitis","malestar_General","ganglios_hinchados","tos","moqueo","dolor_garganta","diarrea","vomito","nauseas","infec_oid","convulsion","comezon","perdida_apetito","dolor_tragar","hinchazon","hinchazon_boca","dolor_abdominal","escalofrio","perdida_gusto","dolor_dentadura","cara","torso","cabeza","extremidades_superiores","extremidades_inferiores","genitales","manos","boca","pies"
- ])
+  data = {
+      "lesion_id": 2,
+      "temperatura":30,
+      "edad": 10,
+      "dolorCabeza": 0 ,
+      "conjuntivitis":  1,
+      "malestarGeneral": 0 ,
+      "gangliosHinchados": 0,
+      "tos": 0 ,
+      "moqueo": 1 ,
+      "dolorGarganta": 0 ,
+      "diarrea": 0,
+      "vomito": 0,
+      "nauseas": 0 ,
+      "comezon": 0 ,
+      "perdidaApetito": 0 ,
+      "dolorTragar":0 ,
+      "hinchazon": 0 ,
+      "hinchazonBoca": 0 ,
+      "dolorAbdominal": 0 ,
+      "escalofrio": 0 ,
+      "perdidaGusto": 0 ,
+      "dolorDentadura": 0 ,
+      "cara": 1,
+      "torso": 0,
+      "cabeza": 0,
+      "extremidadesSuperiores": 0 ,
+      "extremidadesInferiores": 0 ,
+      "genitales": 0 ,
+      "manos": 0,
+      "boca":0,
+      "pies": 1
+ 
+  }
+  json_data = json.dumps(data)
+  response = requests.post(urlendPointR, data=json_data)
+  
+  a = json.loads(response.content) 
+  print(a[0])
+  return JsonResponse({'msg': "Datos procesados correctamente" , "diagnostico": a})
+#  # probar
+  
   
   # fin
   pacientes_nuevos = pd.read_csv('myapp\Test.csv', engine='python', delimiter=';')
@@ -105,7 +143,6 @@ def predict(img,cedu):
   arreglo = cnn.predict(img)
   resultado = arreglo [0]
   respuesta = np.argmax(resultado)
-  print(respuesta)
   
   arr_sorted = np.sort(resultado)[::-1]
   arregloPrediccion = np.array([0, 0, 0])
@@ -113,7 +150,7 @@ def predict(img,cedu):
   while i<3:
     for j in range(0,6):
       if arr_sorted[i] == resultado[j]:
-        arregloPrediccion[i] = j+1    
+        arregloPrediccion[i] = j   
     i += 1
   temp = list()
   try:
@@ -122,23 +159,22 @@ def predict(img,cedu):
     les = None
   for i in range(0,3):  
     
-    if arregloPrediccion[i]==1:
+    if arregloPrediccion[i]==0:
         temp.append('Costras') 
-    if arregloPrediccion[i]==2:
+    if arregloPrediccion[i]==1:
          temp.append('Papula')
 
-    if arregloPrediccion[i]==3:
+    if arregloPrediccion[i]==2:
          temp.append('Vesicula')
 
-    if arregloPrediccion[i]==4:
+    if arregloPrediccion[i]==3:
          temp.append('Leucoplacia')
 
-    if arregloPrediccion[i]==5:
+    if arregloPrediccion[i]==4:
          temp.append('Dermatofitosis')
 
-    if arregloPrediccion[i]==6:
+    if arregloPrediccion[i]==5:
          temp.append('Maculopapular')
-
   if les is None:
     lnew = Lesion(
     cedula = cedu,
@@ -152,24 +188,23 @@ def predict(img,cedu):
     les.tipo2= temp[1]
     les.tipo3= temp[2]
     les.save()
-
   if respuesta == 0:
-    print ('Costras')
+    #print ('Costras')
     lesion = '1'
   elif respuesta == 1:
-    print ('Papula')
+    #print ('Papula')
     lesion = '2'
   elif respuesta == 2:
-    print ('Vesicula')
+    #print ('Vesicula')
     lesion = '3'
   elif respuesta == 3:
-    print ('Leucoplacia')
+    #print ('Leucoplacia')
     lesion = '4'
   elif respuesta == 4:
-    print ('Dermatofitosis')
+    #print ('Dermatofitosis')
     lesion = '5'
   elif respuesta == 5:
-    print ('Maculopapular')
+    #print ('Maculopapular')
     lesion = '6'
   return (arregloPrediccion)
 
@@ -213,22 +248,64 @@ def formulario(request):
           img = cv2.resize(img, (224,224))
           img_tensor = np.array([img])
           d = predict(img_tensor,data['cedula'])
-          #return JsonResponse({'msg': "Datos procesados correctamente" , "diagnostico": "data"})
-          modelo_cargado = load(open('myapp\ModeloPielFinalBosques.sav', 'rb'))
-          unidades_datos = np.array([[d[0],data['temperatura'],data['edad'],data['dolorCabeza'],data['conjuntivitis']
-          ,data['malestarGeneral'],data['gangliosHinchados'],data['tos'],data['moqueo'],data['dolorGarganta'],data['diarrea'],data['vomito'],data['nauseas']
-          ,data['comezon'],data['perdidaApetito'],data['dolorTragar'],data['hinchazon'],data['hinchazonBoca'],data['dolorAbdominal'],data['escalofrio'],data['perdidaGusto']
-          ,data['dolorDentadura'],data['cara'],data['torso'],data['cabeza'],data['extremidadesSuperiores'],data['extremidadesInferiores'],data['genitales'],data['manos'],data['boca'],data['pies']]])
+# LOGICA PARA USAR MODELO ECHO EN PYTHON
+          #modelo_cargado = load(open('myapp\ModeloPielFinalBosques.sav', 'rb'))
+          #unidades_datos = np.array([[d[0],data['temperatura'],data['edad'],data['dolorCabeza'],data['conjuntivitis']
+          #,data['malestarGeneral'],data['gangliosHinchados'],data['tos'],data['moqueo'],data['dolorGarganta'],data['diarrea'],data['vomito'],data['nauseas']
+          #,data['comezon'],data['perdidaApetito'],data['dolorTragar'],data['hinchazon'],data['hinchazonBoca'],data['dolorAbdominal'],data['escalofrio'],data['perdidaGusto']
+          #,data['dolorDentadura'],data['cara'],data['torso'],data['cabeza'],data['extremidadesSuperiores'],data['extremidadesInferiores'],data['genitales'],data['manos'],data['boca'],data['pies']]])
+          #unidades = pd.DataFrame(unidades_datos, columns=["lesion_id","temperatura","edad","dolor_cabeza","conjuntivitis","malestar_general","ganglios_hinchados","tos","moqueo","dolor_garganta","diarrea"
+          #,"vomito","nauseas","comezon","perdida_apetito","dolor_tragar","hinchazon","hinchazon_boca","dolor_abdominal","escalofrio","perdida_gusto","dolor_dentadura"
+          #,"cara","torso","cabeza","extremidades_superiores","extremidades_inferiores","genitales","manos","boca","pies"
+          #])
+          #prediccion_nuevos = modelo_cargado.predict(unidades)   
+# LOGICA PARA USAR MODELO ECHO EN PYTHON FIN
+          
+#LOGICA PARA USAR API EN SERVIDOR R
+          urlendPointR = 'http://127.0.0.1:8000/prediccion'
 
-
-          unidades = pd.DataFrame(unidades_datos, columns=["lesion_id","temperatura","edad","dolor_cabeza","conjuntivitis","malestar_general","ganglios_hinchados","tos","moqueo","dolor_garganta","diarrea"
-          ,"vomito","nauseas","comezon","perdida_apetito","dolor_tragar","hinchazon","hinchazon_boca","dolor_abdominal","escalofrio","perdida_gusto","dolor_dentadura"
-          ,"cara","torso","cabeza","extremidades_superiores","extremidades_inferiores","genitales","manos","boca","pies"
-          ])
-
-          msg = "prediccion correcta"
-          prediccion_nuevos = modelo_cargado.predict(unidades)   
-
+          payload = {
+          "lesion_id":(int) (d[0]),
+          "temperatura":(data['temperatura']),
+          "edad":(int) (data['edad']),
+          "dolorCabeza":(int) (data['dolorCabeza']),
+          "conjuntivitis":(int) ( data['conjuntivitis']),
+          "malestarGeneral":(int) (data['malestarGeneral']),
+          "gangliosHinchados":(int) (data['gangliosHinchados']),
+          "tos":(int) (data['tos']),
+          "moqueo":(int) (data['moqueo']),
+          "dolorGarganta":(int) (data['dolorGarganta']),
+          "diarrea":(int) (data['diarrea']),
+          "vomito":(int) (data['vomito']),
+          "nauseas":(int) (data['nauseas']),
+          "comezon":(int) (data['comezon']),
+          "perdidaApetito":(int)(data['perdidaApetito']),
+          "dolorTragar":(int)(data['dolorTragar']),
+          "hinchazon":(int) (data['hinchazon']),
+          "hinchazonBoca":(int) (data['hinchazonBoca']),
+          "dolorAbdominal":(int) (data['dolorAbdominal']),
+          "escalofrio":(int) (data['escalofrio']),
+          "perdidaGusto":(int) (data['perdidaGusto']),
+          "dolorDentadura":(int) (data['dolorDentadura']),
+          "cara":(int) (data['cara']),
+          "torso":(int) (data['torso']),
+          "cabeza":(int) (data['cabeza']),
+          "extremidadesSuperiores":(int) (data['extremidadesSuperiores']),
+          "extremidadesInferiores":(int) (data['extremidadesInferiores']),
+          "genitales":(int) (data['genitales']),
+          "manos":(int) (data['manos']),
+          "boca":(int) (data['boca']),
+          "pies":(int) (data['pies'])
+          }
+          try:
+            json_data = json.dumps(payload)
+            response = requests.post(urlendPointR, data=json_data)    
+            print(response)
+            prediccion_enR = json.loads(response.content) #ahora la prediccion esta en la variable "prediccion_enR"         
+          except:
+            return JsonResponse({'msg': "Problemas al conectar con el servidor en R" })   
+          
+#LOGICA PARA USAR API EN SERVIDOR R fin    
           try:
             pac = Paciente.objects.get(cedula=data['cedula'])
             pacSintomas = Sintomas.objects.get(cedula=data['cedula'])
@@ -242,16 +319,18 @@ def formulario(request):
             nombre = data['nombre'],
             apellidos=data['apellido'],
             cedula=data['cedula'],
-            enfermedad=prediccion_nuevos[0],
-            tipo_lesion=d,#aui toca poner el id que retorna el modelo de imagenes
+            #enfermedad=prediccion_nuevos[0], #prediccion generada en modelo python
+            enfermedad=prediccion_enR[0], #prediccion generada en modelo en servidor R
+            tipo_lesion=d,
             edad=data['edad']
             )
             pacNew.save()
           else:
             pac.nombre = data['nombre']
             pac.apellidos=data['apellido']
-            pac.enfermedad=prediccion_nuevos[0]
-            pac.tipo_lesion=d#aui toca poner el id que retorna el modelo de imagenes
+            pac.enfermedad=prediccion_enR[0]#prediccion generada en modelo en servidor R   
+            #pac.enfermedad=prediccion_nuevos[0], #prediccion generada en modelo python
+            pac.tipo_lesion=d
             pac.edad=data['edad']
             pac.save()  
 
@@ -326,7 +405,7 @@ def formulario(request):
             pacSintomas.boca = convert(data['boca'])
             pacSintomas.pies = convert(data['pies'])
             pacSintomas.save()
-      return JsonResponse({'msg': "Datos procesados correctamente" , "diagnostico": data})
+      return JsonResponse({'msg': "Datos procesados correctamente" })
     except:
       return JsonResponse({'msg': "Error" })
   return JsonResponse({'error': 'Bad request'}, status=400)
